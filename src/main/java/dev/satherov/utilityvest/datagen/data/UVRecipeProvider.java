@@ -35,14 +35,25 @@ public class UVRecipeProvider extends RecipeProvider {
                 .unlockedBy(String.format("has_%s", tag.location().getPath()), has(tag))
                 .save(recipeOutput, vest.getId());
     }
+    
+    public void upgrade(RecipeOutput recipeOutput, DeferredHolder<Item, ? extends Item> vest, DeferredHolder<Item, ? extends Item> before) {
+        UVShapedRecipeBuilder.shaped(RecipeCategory.MISC, vest.get())
+                .pattern(" a ")
+                .pattern("aba")
+                .pattern(" a ")
+                .define('a', Tags.Items.LEATHERS)
+                .define('b', before.get())
+                .unlockedBy(String.format("has_%s", before.getId().getPath()), has(before.get()))
+                .save(recipeOutput, vest.getId());
+    }
 
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
 
         this.vest(recipeOutput, UVRegistry.LEATHER_UTILITY_VEST, Tags.Items.LEATHERS);
-        this.vest(recipeOutput, UVRegistry.IRON_UTILITY_VEST, Tags.Items.INGOTS_IRON);
-        this.vest(recipeOutput, UVRegistry.GOLD_UTILITY_VEST, Tags.Items.INGOTS_GOLD);
-        this.vest(recipeOutput, UVRegistry.DIAMOND_UTILITY_VEST, Tags.Items.GEMS_DIAMOND);
-        this.vest(recipeOutput, UVRegistry.NETHERITE_UTILITY_VEST, Tags.Items.INGOTS_NETHERITE);
+        this.upgrade(recipeOutput, UVRegistry.IRON_UTILITY_VEST, UVRegistry.LEATHER_UTILITY_VEST);
+        this.upgrade(recipeOutput, UVRegistry.GOLD_UTILITY_VEST, UVRegistry.IRON_UTILITY_VEST);
+        this.upgrade(recipeOutput, UVRegistry.DIAMOND_UTILITY_VEST, UVRegistry.GOLD_UTILITY_VEST);
+        this.upgrade(recipeOutput, UVRegistry.NETHERITE_UTILITY_VEST, UVRegistry.DIAMOND_UTILITY_VEST);
     }
 }

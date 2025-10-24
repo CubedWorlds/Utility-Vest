@@ -1,21 +1,18 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "utilityvest:upgrade",
   "category": "misc",
   "key": {
     "a": {
       "tag": "c:leathers"
     },
     "b": {
-      "tag": "c:chests"
-    },
-    "c": {
-      "tag": "c:ingots/iron"
+      "item": "utilityvest:leather_utility_vest"
     }
   },
   "pattern": [
-    "a a",
+    " a ",
     "aba",
-    "ccc"
+    " a "
   ],
   "result": {
     "count": 1,

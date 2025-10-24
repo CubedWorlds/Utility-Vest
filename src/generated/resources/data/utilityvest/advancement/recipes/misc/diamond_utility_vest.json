@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_gems/diamond": {
+    "has_gold_utility_vest": {
       "conditions": {
         "items": [
           {
-            "items": "#c:gems/diamond"
+            "items": "utilityvest:gold_utility_vest"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_gems/diamond"
+      "has_gold_utility_vest"
     ]
   ],
   "rewards": {

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "dev.satherov.utilityvest.core.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ShapedRecipeBuilderAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+  ]
+}

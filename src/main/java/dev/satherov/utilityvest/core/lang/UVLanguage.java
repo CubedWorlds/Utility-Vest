@@ -5,7 +5,7 @@ import dev.satherov.utilityvest.UtilityVest;
 import net.minecraft.Util;
 
 public enum UVLanguage implements ILangEntry {
-    ITEM_GROUP("itemGroup.utility_vest"),
+    ITEM_GROUP("itemGroup.utilityvest"),
 
     NETWORK_SAVE_LOAD_FAILED("network", "save_load.failed"),
     NETWORK_OPEN_MENU_FAILED("network", "open_menu.failed"),

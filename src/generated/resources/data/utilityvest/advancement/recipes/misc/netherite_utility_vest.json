@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ingots/netherite": {
+    "has_diamond_utility_vest": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ingots/netherite"
+            "items": "utilityvest:diamond_utility_vest"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_ingots/netherite"
+      "has_diamond_utility_vest"
     ]
   ],
   "rewards": {

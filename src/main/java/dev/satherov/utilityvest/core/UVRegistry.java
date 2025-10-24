@@ -4,6 +4,7 @@ import dev.satherov.utilityvest.UtilityVest;
 import dev.satherov.utilityvest.common.item.UVVestItem;
 import dev.satherov.utilityvest.common.menu.UVFilterMenu;
 import dev.satherov.utilityvest.common.menu.UVInventoryMenu;
+import dev.satherov.utilityvest.datagen.data.UVShapedRecipe;
 
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -16,6 +17,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import java.util.function.Supplier;
 
@@ -23,6 +25,7 @@ public class UVRegistry {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, UtilityVest.MOD_ID);
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, UtilityVest.MOD_ID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UtilityVest.MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, UtilityVest.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, UtilityVest.MOD_ID);
 
@@ -75,4 +78,6 @@ public class UVRegistry {
                     .networkSynchronized(ItemContainerContents.STREAM_CODEC)
                     .build()
     );
+    
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<UVShapedRecipe>> UPGRADE_SERIALIZER = RECIPE_SERIALIZERS.register("upgrade", UVShapedRecipe.Serializer::new);
 }

@@ -221,7 +221,7 @@ public class UVVestCapability implements IItemHandlerModifiable {
     public boolean matchFilter(ItemStack stack) {
         var filtersList = getFilters();
         if (filtersList.stream().allMatch(ItemStack::isEmpty)) return true;
-        return filtersList.stream().anyMatch(f -> ItemStack.isSameItemSameComponents(f, stack));
+        return filtersList.stream().anyMatch(f -> ItemStack.isSameItem(f, stack));
     }
 
     private ItemStack insertWithOverflow(ItemStack toInsert) {
@@ -230,7 +230,7 @@ public class UVVestCapability implements IItemHandlerModifiable {
 
         for (int i = 0; i < this.getSlots(); i++) {
             ItemStack inSlot = this.getStackInSlot(i);
-            if (!inSlot.isEmpty() && ItemStack.isSameItemSameComponents(inSlot, remainder)) {
+            if (!inSlot.isEmpty() && ItemStack.isSameItem(inSlot, remainder)) {
                 remainder = this.insertItem(i, remainder, false);
                 if (remainder.isEmpty()) return ItemStack.EMPTY;
             }
@@ -257,7 +257,7 @@ public class UVVestCapability implements IItemHandlerModifiable {
             ItemStack storedItem = source.getStackInSlot(i);
             if (storedItem.isEmpty()) continue;
 
-            if (ItemStack.isSameItemSameComponents(template, storedItem)) {
+            if (ItemStack.isSameItem(template, storedItem)) {
                 if (result.isEmpty()) {
                     result = storedItem.copy();
                     int extracted = source.extractItem(i, Math.min(storedItem.getCount(), neededAmount));
@@ -277,7 +277,6 @@ public class UVVestCapability implements IItemHandlerModifiable {
         return result;
     }
 
-    // Keep the original interfaces
     private interface IItemSourceHandler {
         int getSize();
 

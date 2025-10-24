@@ -10,7 +10,7 @@
   "item.utilityvest.iron_utility_vest": "Iron Utility Vest",
   "item.utilityvest.leather_utility_vest": "Leather Utility Vest",
   "item.utilityvest.netherite_utility_vest": "Netherite Utility Vest",
-  "itemGroup.utility_vest": "Utility Vest",
+  "itemGroup.utilityvest": "Utility Vest",
   "key.utilityvest.category": "Utility Vest",
   "key.utilityvest.gui": "Open Gui",
   "key.utilityvest.load": "Load Modifier",

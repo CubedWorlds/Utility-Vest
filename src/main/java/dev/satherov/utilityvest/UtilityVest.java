@@ -40,6 +40,7 @@ public class UtilityVest {
 
         UVRegistry.ITEMS.register(modEventBus);
         UVRegistry.DATA_COMPONENT_TYPES.register(modEventBus);
+        UVRegistry.RECIPE_SERIALIZERS.register(modEventBus);
         UVRegistry.CREATIVE_MODE_TABS.register(modEventBus);
         UVRegistry.MENU_TYPES.register(modEventBus);
 

@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ingots/iron": {
+    "has_leather_utility_vest": {
       "conditions": {
         "items": [
           {
-            "items": "#c:ingots/iron"
+            "items": "utilityvest:leather_utility_vest"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_ingots/iron"
+      "has_leather_utility_vest"
     ]
   ],
   "rewards": {
