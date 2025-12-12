@@ -29,27 +29,6 @@ public class UVVestCapability implements IItemHandlerModifiable {
 
         this.filters = new ComponentItemHandler(stack, UVRegistry.FILTER_INVENTORY.get(), maxBanks * 9);
         this.storage = new ComponentItemHandler(stack, UVRegistry.ITEM_INVENTORY.get(), maxBanks * 9);
-
-        // TODO REMOVE ME
-        // Datafixer or something idk, ugly mess stuff things
-
-        ComponentItemHandler old = new ComponentItemHandler(stack, UVRegistry.VEST_INVENTORY.get(), maxBanks * 18);
-
-        int split = old.getSlots() / 2;
-        // Filters
-        for (int i = 0; i < split; i++) {
-            var item = old.extractItem(i, old.getStackInSlot(i).getCount(), false);
-            if (!item.isEmpty()) {
-                filters.insertItem(i, item, false);
-            }
-        }
-        // Storage
-        for (int i = split; i < old.getSlots(); i++) {
-            var item = old.extractItem(i, old.getStackInSlot(i).getCount(), false);
-            if (!item.isEmpty()) {
-                storage.insertItem(i - split, item, false);
-            }
-        }
     }
 
     @Override

@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "a": {
-      "tag": "c:leathers"
+      "tag": "c:ingots/netherite"
     },
     "b": {
       "item": "utilityvest:diamond_utility_vest"

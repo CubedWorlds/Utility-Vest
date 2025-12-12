@@ -83,29 +83,29 @@ public class UVFilterMenu extends UVVestMenu {
         if (slotId >= 0 && slotId < (this.rows * 9)) {
             final Slot slot = this.slots.get(slotId);
 
-            if (clickType == ClickType.PICKUP || clickType == ClickType.PICKUP_ALL || clickType == ClickType.SWAP) {
-                final ItemStack stack = this.getCarried();
-
-                if (stack.isStackable() && stack.getCount() > 0) {
-                    slot.set(stack.copy());
-                } else if(!stack.isStackable() && stack.getCount() > 0) {
-                    try {
+            switch (clickType) {
+                case SWAP:
+                case PICKUP:
+                case PICKUP_ALL: {
+                    final ItemStack stack = this.getCarried();
+                    
+                    if (stack.isStackable() && stack.getCount() > 0) {
                         slot.set(stack.copy());
-                    } catch (Exception e) {
+                    } else if(!stack.isStackable() && stack.getCount() > 0) {
+                        try {
+                            slot.set(stack.copy());
+                        } catch (Exception e) {
+                            slot.set(ItemStack.EMPTY);
+                            player.closeContainer();
+                            player.displayClientMessage(UVLanguage.ERROR_REJECTED.translate().withStyle(ChatFormatting.RED), true);
+                            return;
+                        }
+                    } else if (slot.getItem().getCount() > 0) {
                         slot.set(ItemStack.EMPTY);
-                        player.closeContainer();
-                        player.displayClientMessage(UVLanguage.ERROR_REJECTED.translate().withStyle(ChatFormatting.RED), true);
-                        return;
                     }
-                } else if (slot.getItem().getCount() > 0) {
-                    slot.set(ItemStack.EMPTY);
+                    return;
                 }
-                return;
-            }
-
-            if (clickType == ClickType.QUICK_MOVE) {
-                slot.set(ItemStack.EMPTY);
-                return;
+                default: slot.set(ItemStack.EMPTY);
             }
         }
 

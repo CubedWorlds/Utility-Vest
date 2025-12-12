@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "a": {
-      "tag": "c:leathers"
+      "tag": "c:ingots/iron"
     },
     "b": {
       "item": "utilityvest:leather_utility_vest"
