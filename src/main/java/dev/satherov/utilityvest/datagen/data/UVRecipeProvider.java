@@ -19,11 +19,11 @@ import java.util.concurrent.CompletableFuture;
 
 @NothingNull
 public class UVRecipeProvider extends RecipeProvider {
-
+    
     public UVRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
-
+    
     public void vest(RecipeOutput recipeOutput, DeferredHolder<Item, ? extends Item> vest, TagKey<Item> tag) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, vest.get())
                 .pattern("a a")
@@ -46,10 +46,10 @@ public class UVRecipeProvider extends RecipeProvider {
                 .unlockedBy(String.format("has_%s", before.getId().getPath()), has(before.get()))
                 .save(recipeOutput, vest.getId());
     }
-
+    
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
-
+        
         this.vest(recipeOutput, UVRegistry.LEATHER_UTILITY_VEST, Tags.Items.LEATHERS);
         this.upgrade(recipeOutput, UVRegistry.IRON_UTILITY_VEST, Tags.Items.INGOTS_IRON, UVRegistry.LEATHER_UTILITY_VEST);
         this.upgrade(recipeOutput, UVRegistry.GOLD_UTILITY_VEST, Tags.Items.INGOTS_GOLD, UVRegistry.IRON_UTILITY_VEST);

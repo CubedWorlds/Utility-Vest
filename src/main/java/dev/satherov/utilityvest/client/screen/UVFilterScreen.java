@@ -16,11 +16,11 @@ import net.minecraft.world.entity.player.Inventory;
 @NothingNull
 @OnlyIn(Dist.CLIENT)
 public class UVFilterScreen extends AbstractContainerScreen<UVFilterMenu> implements MenuAccess<UVFilterMenu> {
-
+    
     private static final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
-
+    
     private final int containerRows;
-
+    
     public UVFilterScreen(UVFilterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         int i = 222;
@@ -29,7 +29,7 @@ public class UVFilterScreen extends AbstractContainerScreen<UVFilterMenu> implem
         this.imageHeight = 114 + this.containerRows * 18;
         this.inventoryLabelY = this.imageHeight - 94;
     }
-
+    
     /**
      * Renders the graphical user interface (GUI) element.
      *
@@ -43,7 +43,7 @@ public class UVFilterScreen extends AbstractContainerScreen<UVFilterMenu> implem
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
-
+    
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         int i = (this.width - this.imageWidth) / 2;

@@ -18,11 +18,11 @@ import net.minecraft.world.item.ItemStack;
 
 @NothingNull
 public class UVInventoryMenu extends UVVestMenu {
-
+    
     public UVInventoryMenu(int containerId, Inventory inventory, int rows) {
         super(getMenuProvider(rows), containerId, inventory, rows);
     }
-
+    
     private static MenuType<?> getMenuProvider(int rows) {
         return switch (rows) {
             case 1 -> UVRegistry.INVENTORY_MENU_ONE.get();
@@ -33,63 +33,71 @@ public class UVInventoryMenu extends UVVestMenu {
             default -> throw new IllegalArgumentException("Invalid row count: " + rows);
         };
     }
-
+    
     @Override
     protected void addVestSlots(Inventory inventory, UVVestCapability handler, int yOffset) {
-
+        
         // Vest Inventory
         for (int j = 0; j < this.rows; j++) {
             for (int k = 0; k < 9; k++) {
                 this.addSlot(new SlotItemHandler(handler.storage, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
         }
-
+        
         super.addVestSlots(inventory, handler, yOffset);
     }
-
+    
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
+        ItemStack result = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-
+        
         if (slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
-
-            if (itemstack1.getItem() instanceof UVVestItem) {
+            ItemStack stack = slot.getItem();
+            result = stack.copy();
+            
+            if (stack.getItem() instanceof UVVestItem) {
                 return ItemStack.EMPTY;
             }
-
+            
             if (index < this.rows * 9) {
-                if (!this.moveItemStackTo(itemstack1, this.rows * 9, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(stack, this.rows * 9, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemstack1, 0, this.rows * 9, false)) {
+            } else if (!this.moveItemStackTo(stack, 0, this.rows * 9, false)) {
                 return ItemStack.EMPTY;
             }
-
-            if (itemstack1.isEmpty()) {
+            
+            if (stack.isEmpty()) {
                 slot.setByPlayer(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
         }
-
-        return itemstack;
+        
+        return result;
     }
     
     @Override
-    public void clicked(int slotId, int button, ClickType clickType, Player player) {
-        if (slotId >= 0 && slotId < (this.rows * 9)) {
+    public void clicked(int slotId, int button, ClickType type, Player player) {
+        if (slotId >= 0 && slotId < this.slots.size()) {
             final Slot slot = this.slots.get(slotId);
-            ClickAction action = button == 0 ? ClickAction.PRIMARY : ClickAction.SECONDARY;
             final ItemStack stack = slot.getItem();
             final ItemStack carried = this.getCarried();
+            if (stack.getItem() instanceof UVVestItem) return;
             
-            if (stack.overrideStackedOnOther(slot, action, player) || stack.overrideOtherStackedOnMe(carried, slot, action, player, this.createAccess())) return;
+            if (type == ClickType.SWAP && (button >= 0 && button < 9 || button == 40)) {
+                ItemStack target = player.getInventory().getItem(button);
+                if (target.getItem() instanceof UVVestItem) return;
+            }
+            
+            if (slotId < (this.rows * 9)) {
+                ClickAction action = button == 0 ? ClickAction.PRIMARY : ClickAction.SECONDARY;
+                if (stack.overrideStackedOnOther(slot, action, player) || stack.overrideOtherStackedOnMe(carried, slot, action, player, this.createAccess())) return;
+            }
         }
         
-        super.clicked(slotId, button, clickType, player);
+        super.clicked(slotId, button, type, player);
     }
     
     private SlotAccess createAccess() {

@@ -9,11 +9,11 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.minecraft.data.PackOutput;
 
 public class UVItemModelProvider extends ItemModelProvider {
-
+    
     public UVItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, UtilityVest.MOD_ID, existingFileHelper);
     }
-
+    
     @Override
     protected void registerModels() {
         UVRegistry.ITEMS.getEntries().stream().toList().forEach(item -> {

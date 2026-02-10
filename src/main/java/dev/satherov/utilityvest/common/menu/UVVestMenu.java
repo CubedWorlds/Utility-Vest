@@ -18,11 +18,11 @@ import net.minecraft.world.item.ItemStack;
 
 @NothingNull
 public abstract class UVVestMenu extends AbstractContainerMenu {
-
+    
     protected final int rows;
     protected UVVestCapability capability;
     protected ItemStack vestStack;
-
+    
     public UVVestMenu(MenuType<?> menuType, int containerId, Inventory inventory, int rows) {
         super(menuType, containerId);
         ItemStack stack = UVVestItem.getVest(inventory, true);
@@ -32,44 +32,45 @@ public abstract class UVVestMenu extends AbstractContainerMenu {
             return;
         }
         this.vestStack = stack;
-
-
+        
+        
         IItemHandler handler = vestStack.getCapability(Capabilities.ItemHandler.ITEM);
         if (handler == null) {
             inventory.player.closeContainer();
             return;
         }
-
+        
         if (handler instanceof UVVestCapability cap) {
             this.capability = cap;
         }
-
+        
         int yOffset = (rows - 4) * 18;
-
+        
         addVestSlots(inventory, capability, yOffset);
     }
-
+    
     protected void addVestSlots(Inventory inventory, UVVestCapability handler, int yOffset) {
-
+        
         // Player Inventory
         for (int inv = 0; inv < 3; inv++) {
             for (int j1 = 0; j1 < 9; j1++) {
                 this.addSlot(new SlotItemHandler(new InvWrapper(inventory), j1 + inv * 9 + 9, 8 + j1 * 18, 103 + inv * 18 + yOffset));
             }
         }
-
+        
         // Hotbar
         for (int hotbar = 0; hotbar < 9; hotbar++) {
             this.addSlot(new SlotItemHandler(new InvWrapper(inventory), hotbar, 8 + hotbar * 18, 161 + yOffset));
         }
     }
-
+    
     public int getRows() {
         return rows;
     }
-
+    
     @Override
     public boolean stillValid(Player player) {
-        return !UVVestItem.getVest(player, true).isEmpty() && !player.isSpectator();
+        if (UVVestItem.getVest(player, true).isEmpty()) return false;
+        return player.isAlive();
     }
 }

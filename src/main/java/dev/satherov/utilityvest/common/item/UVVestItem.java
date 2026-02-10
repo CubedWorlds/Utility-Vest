@@ -29,18 +29,18 @@ import java.util.Optional;
 
 @NothingNull
 public class UVVestItem extends Item {
-
+    
     private final int maxBanks;
-
+    
     public UVVestItem(Properties props, int maxBanks) {
         super(props.stacksTo(1));
         this.maxBanks = maxBanks;
     }
-
+    
     public static ItemStack getVest(Player player, boolean checkHand) {
         return getVest(player.getInventory(), checkHand);
     }
-
+    
     public static ItemStack getVest(Inventory inventory, boolean checkHand) {
         Player player = inventory.player;
         if (checkHand && player.getMainHandItem().getItem() instanceof UVVestItem) {
@@ -59,15 +59,16 @@ public class UVVestItem extends Item {
                     }).orElse(ItemStack.EMPTY);
         }
     }
-
+    
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(UVLanguage.TOOLTIP_VEST_FILTER.translate(UVKeybindManager.GUI_KEY.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(UVLanguage.TOOLTIP_VEST_INVENTORY.translate(UVKeybindManager.GUI_KEY.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(UVLanguage.TOOLTIP_VEST_HOTBAR.translate(UVKeybindManager.SAVE.getKey().getDisplayName(), UVKeybindManager.SAVE.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(UVLanguage.TOOLTIP_VEST_RESTOCK.translate(UVKeybindManager.RESTOCK.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(UVLanguage.TOOLTIP_VEST_RADIAL.translate(UVKeybindManager.RADIAL_KEY.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(UVLanguage.TOOLTIP_VEST_HOTBAR.translate(UVKeybindManager.SAVE.getKey().getDisplayName(), UVKeybindManager.LOAD.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY));
     }
-
+    
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -79,19 +80,19 @@ public class UVVestItem extends Item {
                 player.openMenu(this.getInventoryMenu());
             }
             return InteractionResultHolder.success(stack);
-
+            
         }
         return super.use(level, player, hand);
     }
-
+    
     public int getMaxBanks() {
         return maxBanks;
     }
-
+    
     public MenuProvider getInventoryMenu() {
         return new SimpleMenuProvider((id, inventory, player) -> new UVInventoryMenu(id, inventory, getMaxBanks()), UVLanguage.CONTAINER_UTILITY_VEST.translate());
     }
-
+    
     public MenuProvider getFilterMenu() {
         return new SimpleMenuProvider((id, inventory, player) -> new UVFilterMenu(id, inventory, getMaxBanks()), UVLanguage.CONTAINER_FILTERS.translate());
     }

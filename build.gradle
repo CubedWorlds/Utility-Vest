@@ -93,9 +93,6 @@ dependencies {
 
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-
-    implementation "curse.maven:sophisticated-core-618298:6596310"
-    implementation "curse.maven:sophisticated-backpacks-422301:6586226"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

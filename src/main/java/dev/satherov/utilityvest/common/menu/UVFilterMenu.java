@@ -18,11 +18,11 @@ import net.minecraft.world.item.ItemStack;
 
 @NothingNull
 public class UVFilterMenu extends UVVestMenu {
-
+    
     public UVFilterMenu(int containerId, Inventory inventory, int rows) {
         super(getMenuProvider(rows), containerId, inventory, rows);
     }
-
+    
     private static MenuType<?> getMenuProvider(int rows) {
         return switch (rows) {
             case 1 -> UVRegistry.FILTER_MENU_ONE.get();
@@ -33,56 +33,56 @@ public class UVFilterMenu extends UVVestMenu {
             default -> throw new IllegalArgumentException("Invalid row count: " + rows);
         };
     }
-
+    
     @Override
     protected void addVestSlots(Inventory inventory, UVVestCapability handler, int yOffset) {
-
+        
         // Filter Slots
         for (int j = 0; j < this.rows; j++) {
             for (int k = 0; k < 9; k++) {
                 this.addSlot(new SlotItemHandler(handler.filters, k + j * 9, 8 + k * 18, 18 + j * 18) {
-
+                    
                     @Override
                     public int getMaxStackSize() {
                         return 1;
                     }
-
+                    
                     @Override
                     public void onTake(Player player, ItemStack stack) {
                     }
-
+                    
                     @Override
                     public ItemStack remove(int amount) {
                         return ItemStack.EMPTY;
                     }
-
+                    
                     @Override
                     public boolean mayPlace(ItemStack stack) {
                         return false;
                     }
-
+                    
                     @Override
                     public boolean mayPickup(Player player) {
                         return false;
                     }
-
+                    
                 });
             }
         }
-
+        
         super.addVestSlots(inventory, handler, yOffset);
     }
-
+    
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         return ItemStack.EMPTY;
     }
-
+    
     @Override
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
         if (slotId >= 0 && slotId < (this.rows * 9)) {
             final Slot slot = this.slots.get(slotId);
-
+            
             switch (clickType) {
                 case SWAP:
                 case PICKUP:
@@ -91,7 +91,7 @@ public class UVFilterMenu extends UVVestMenu {
                     
                     if (stack.isStackable() && stack.getCount() > 0) {
                         slot.set(stack.copy());
-                    } else if(!stack.isStackable() && stack.getCount() > 0) {
+                    } else if (!stack.isStackable() && stack.getCount() > 0) {
                         try {
                             slot.set(stack.copy());
                         } catch (Exception e) {
@@ -105,10 +105,11 @@ public class UVFilterMenu extends UVVestMenu {
                     }
                     return;
                 }
-                default: slot.set(ItemStack.EMPTY);
+                default:
+                    slot.set(ItemStack.EMPTY);
             }
         }
-
+        
         super.clicked(slotId, button, clickType, player);
     }
 }

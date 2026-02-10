@@ -16,27 +16,24 @@ import net.minecraft.world.entity.player.Inventory;
 @NothingNull
 @OnlyIn(Dist.CLIENT)
 public class UVInventoryScreen extends AbstractContainerScreen<UVInventoryMenu> implements MenuAccess<UVInventoryMenu> {
-
+    
     private static final ResourceLocation CONTAINER_BACKGROUND = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
-
+    
     private final int containerRows;
-
+    
     public UVInventoryScreen(UVInventoryMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        int i = 222;
-        int j = 114;
         this.containerRows = menu.getRows();
         this.imageHeight = 114 + this.containerRows * 18;
         this.inventoryLabelY = this.imageHeight - 94;
     }
-
-
+    
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
-
+    
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         int i = (this.width - this.imageWidth) / 2;

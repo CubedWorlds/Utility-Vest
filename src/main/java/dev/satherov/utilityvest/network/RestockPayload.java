@@ -17,44 +17,44 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 public record RestockPayload(boolean filter) implements CustomPacketPayload {
-
+    
     public static final StreamCodec<FriendlyByteBuf, RestockPayload> STREAM_CODEC =
             CustomPacketPayload.codec(RestockPayload::encode, RestockPayload::new);
-
+    
     public static final Type<RestockPayload> TYPE = new Type<>(
             ResourceLocation.fromNamespaceAndPath(UtilityVest.MOD_ID, "restock")
     );
-
+    
     private RestockPayload(FriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
-
+    
     public void encode(FriendlyByteBuf buf) {
         buf.writeBoolean(this.filter);
     }
-
+    
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
-
+    
     public static class Handler {
         public static void handle(RestockPayload msg, IPayloadContext ctx) {
             ctx.enqueueWork(() -> {
                 if (!ctx.flow().isServerbound() || !(ctx.player() instanceof ServerPlayer player)) {
                     return;
                 }
-
+                
                 ItemStack vestStack = UVVestItem.getVest(player, false);
-
+                
                 if (!vestStack.isEmpty() && vestStack.getItem() instanceof UVVestItem) {
                     IItemHandler handler = vestStack.getCapability(Capabilities.ItemHandler.ITEM);
-
+                    
                     if (handler instanceof UVVestCapability capability) {
                         capability.collectItems(player);
                     }
                 }
-
+                
             }).exceptionally(e -> {
                 ctx.disconnect(UVLanguage.NETWORK_RESTOCK_FAILED.translate(e.getMessage()));
                 return null;
