@@ -49,33 +49,56 @@ public class UVInventoryMenu extends UVVestMenu {
     
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        ItemStack result = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
+        final SlotItemHandler slot = (SlotItemHandler) this.slots.get(index);
         
-        if (slot.hasItem()) {
-            ItemStack stack = slot.getItem();
-            result = stack.copy();
-            
-            if (stack.getItem() instanceof UVVestItem) {
-                return ItemStack.EMPTY;
-            }
-            
-            if (index < this.rows * 9) {
-                if (!this.moveItemStackTo(stack, this.rows * 9, this.slots.size(), true)) {
-                    return ItemStack.EMPTY;
+        if (!slot.hasItem()) return ItemStack.EMPTY;
+        
+        final ItemStack original = slot.getItem().copy();
+        ItemStack result = slot.getItem().copy();
+        
+        if (result.getItem() instanceof UVVestItem) {
+            return ItemStack.EMPTY;
+        }
+        
+        if (index < this.rows * 9) {
+            int idx = this.rows * 9;
+            while (idx < this.slots.size() && !result.isEmpty()) {
+                SlotItemHandler target = (SlotItemHandler) this.slots.get(idx);
+                
+                if (target.mayPlace(result)) {
+                    ItemStack remainder = target.getItemHandler().insertItem(target.getSlotIndex(), result, false);
+                    int inserted = result.getCount() - remainder.getCount();
+                    result = remainder;
+                    
+                    if (inserted > 0) target.setChanged();
                 }
-            } else if (!this.moveItemStackTo(stack, 0, this.rows * 9, false)) {
-                return ItemStack.EMPTY;
+                idx++;
             }
-            
-            if (stack.isEmpty()) {
-                slot.setByPlayer(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
+        }
+        // Move from player inventory to vest
+        else {
+            int idx = 0;
+            while (idx < this.rows * 9 && !result.isEmpty()) {
+                SlotItemHandler target = (SlotItemHandler) this.slots.get(idx);
+                
+                if (target.mayPlace(result)) {
+                    ItemStack remainder = target.getItemHandler().insertItem(target.getSlotIndex(), result, false);
+                    int inserted = result.getCount() - remainder.getCount();
+                    result = remainder;
+                    
+                    if (inserted > 0) target.setChanged();
+                }
+                idx++;
             }
         }
         
-        return result;
+        int moved = original.getCount() - result.getCount();
+        if (moved > 0) {
+            slot.getItemHandler().extractItem(slot.getSlotIndex(), moved, false);
+            slot.setChanged();
+        }
+        
+        return original;
     }
     
     @Override
