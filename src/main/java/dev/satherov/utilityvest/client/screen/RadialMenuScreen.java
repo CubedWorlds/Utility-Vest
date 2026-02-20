@@ -67,10 +67,7 @@ public class RadialMenuScreen extends Screen {
     }
     
     private void closeIfInvalid() {
-        if (!this.validate()) {
-            this.onClose();
-            this.minecraft.setScreen(null);
-        }
+        if (!this.validate()) this.onClose();
     }
     
     private boolean validate() {
@@ -263,8 +260,13 @@ public class RadialMenuScreen extends Screen {
     public boolean mouseScrolled(double mx, double my, double dx, double dy) {
         this.row = (int) ((Math.clamp(this.row + Math.signum(dy), 0, Integer.MAX_VALUE)) % this.banks);
         this.updateDisplay();
-        this.closeIfInvalid();
         return super.mouseScrolled(mx, my, dx, dy);
+    }
+    
+    @Override
+    public void afterMouseAction() {
+        super.afterMouseAction();
+        this.closeIfInvalid();
     }
     
     @Override
