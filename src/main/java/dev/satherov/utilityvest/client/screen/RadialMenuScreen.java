@@ -226,6 +226,10 @@ public class RadialMenuScreen extends Screen {
         if (distance < RadialMenuScreen.CENTER_DEAD_ZONE || distance > RadialMenuScreen.OUTER_RADIUS + RadialMenuScreen.HOVER_EXTEND) {
             return -1;
         }
+
+        if (this.menuItems.isEmpty()) {
+            return -1;
+        }
         
         float angle = (float) Math.toDegrees(Math.atan2(dy, dx)) + 90;
         if (angle < 0) angle += 360;
