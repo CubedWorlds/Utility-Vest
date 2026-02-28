@@ -61,25 +61,6 @@ public class RadialMenuScreen extends Screen {
     }
     
     @Override
-    protected void init() {
-        super.init();
-        this.closeIfInvalid();
-    }
-    
-    private void closeIfInvalid() {
-        if (!this.validate()) this.onClose();
-    }
-    
-    private boolean validate() {
-        if (this.menuItems.isEmpty()) {
-            if (++this.row >= this.banks) return false;
-            this.updateDisplay();
-            return this.validate();
-        }
-        return true;
-    }
-    
-    @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
@@ -93,7 +74,17 @@ public class RadialMenuScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         
-        graphics.renderItem(Items.BARRIER.getDefaultInstance(), centerX - 8, centerY - 8);
+        final ItemStack barrier = Items.BARRIER.getDefaultInstance();
+        final int xPos = centerX - 8;
+        final int yPos = centerY - 8;
+        graphics.renderItem(barrier, xPos, yPos);
+        
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 200.0F);
+        final String text = Integer.toString(this.row + 1);
+        graphics.drawString(font, text, xPos + 17 - font.width(text), yPos + 9, 16777215, true);
+        graphics.pose().popPose();
+        
         if (this.hoveredIndex < 0) {
             Player player = Minecraft.getInstance().player;
             if (player != null) {
@@ -139,11 +130,13 @@ public class RadialMenuScreen extends Screen {
         
         buffer.addVertex(matrix, centerX, centerY, 0).setColor(0.0f, 0.0f, 0.0f, 0.0f);
         
-        int segments = 64;
+        final int segments = 64;
+        float radius = RadialMenuScreen.OUTER_RADIUS + RadialMenuScreen.HOVER_EXTEND;
+        
         for (int i = 0; i <= segments; i++) {
-            float angle = (float) (2 * Math.PI * i / segments);
-            float x = centerX + (float) Math.cos(angle);
-            float y = centerY + (float) Math.sin(angle);
+            float angle = (float) (2.0 * Math.PI * i / segments);
+            float x = centerX + (float) Math.cos(angle) * radius;
+            float y = centerY + (float) Math.sin(angle) * radius;
             
             buffer.addVertex(matrix, x, y, 0).setColor(0.0f, 0.0f, 0.0f, 0.6f);
         }
@@ -164,11 +157,13 @@ public class RadialMenuScreen extends Screen {
         
         float labelRadius = RadialMenuScreen.INNER_RADIUS + (outerRadius - RadialMenuScreen.INNER_RADIUS) * 0.6f;
         
-        int x = (int) (centerX + (Math.cos(midRad) * labelRadius));
-        int y = (int) (centerY + (Math.sin(midRad) * labelRadius));
+        int x = (int) (centerX + (Math.cos(midRad) * labelRadius)) - 8;
+        int y = (int) (centerY + (Math.sin(midRad) * labelRadius)) - 8;
         
-        graphics.renderItem(stack, x, y);
-        graphics.renderItemDecorations(this.font, stack, x, y, String.valueOf(stack.getCount()));
+        if (!stack.isEmpty()) {
+            graphics.renderItem(stack, x, y);
+            graphics.renderItemDecorations(this.font, stack, x, y, String.valueOf(stack.getCount()));
+        }
         
         if (!isHovered) return;
         Player player = Minecraft.getInstance().player;
@@ -226,7 +221,7 @@ public class RadialMenuScreen extends Screen {
         if (distance < RadialMenuScreen.CENTER_DEAD_ZONE || distance > RadialMenuScreen.OUTER_RADIUS + RadialMenuScreen.HOVER_EXTEND) {
             return -1;
         }
-
+        
         if (this.menuItems.isEmpty()) {
             return -1;
         }
@@ -252,25 +247,21 @@ public class RadialMenuScreen extends Screen {
         
         if (button == 0 || button == 1) {
             RadialMenuItem item = this.menuItems.get(this.hoveredIndex);
+            if (item.stack().isEmpty()) return true;
             item.action().accept(button == 0);
             this.updateDisplay();
             return true;
         }
         
-        return super.mouseClicked(mouseX, mouseY, button);
+        return true;
     }
     
     @Override
     public boolean mouseScrolled(double mx, double my, double dx, double dy) {
-        this.row = (int) ((Math.clamp(this.row + Math.signum(dy), 0, Integer.MAX_VALUE)) % this.banks);
+        int delta = (int) Math.signum(dy);
+        this.row = Math.floorMod(this.row + delta, this.banks);
         this.updateDisplay();
-        return super.mouseScrolled(mx, my, dx, dy);
-    }
-    
-    @Override
-    public void afterMouseAction() {
-        super.afterMouseAction();
-        this.closeIfInvalid();
+        return true;
     }
     
     @Override
@@ -290,23 +281,14 @@ public class RadialMenuScreen extends Screen {
         this.menuItems.clear();
         
         var handler = this.vest.getCapability(Capabilities.ItemHandler.ITEM);
-        if (!(handler instanceof UVVestCapability capability)) {
-            this.closeIfInvalid();
-            return;
-        }
+        if (!(handler instanceof UVVestCapability capability)) return;
         
         NonNullList<ItemStack> stacks = capability.getStorage();
-        if (stacks.isEmpty()) {
-            this.closeIfInvalid();
-            return;
-        }
-        
         final int startIndex = this.row * 9;
         
         for (int i = 0; i < 9; i++) {
             if (startIndex + i < stacks.size()) {
                 ItemStack stack = stacks.get(startIndex + i);
-                if (stack.isEmpty()) continue;
                 this.addMenuItem(stack, dir -> {
                     UVNetworking.doSwap(this.minecraft.player, dir, this.vest, stack);
                     this.updateDisplay();
