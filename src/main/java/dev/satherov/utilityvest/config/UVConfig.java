@@ -32,4 +32,25 @@ public class UVConfig {
             return this.comment;
         }
     }
+
+    @ConfigVal(name = "radial_stack_count", comment = "Defines when stack size label should be displayed for single items")
+    @ConfigVal.Enum(RadialStackCountDisplay.class)
+    public static RadialStackCountDisplay RadialStackCount = RadialStackCountDisplay.TOOLS_ONLY;
+
+    public enum RadialStackCountDisplay implements ConfigEnum {
+        ALWAYS("Always show the stack counts for single items"),
+        TOOLS_ONLY("Hide stack counts for tools & armor only"),
+        NEVER("Never show the stack count for single items"),;
+
+        RadialStackCountDisplay(String comment) {
+            this.comment = comment;
+        }
+
+        public final String comment;
+
+        @Override
+        public String comment() {
+            return this.comment;
+        }
+    }
 }

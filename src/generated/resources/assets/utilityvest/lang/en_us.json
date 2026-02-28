@@ -32,5 +32,6 @@
   "tooltip.utilityvest.vest.radial": "Hold %s + a number key to open the quick-select menu",
   "tooltip.utilityvest.vest.restock": "Press %s to insert items matching your filters into the vest's inventory",
   "utilityvest.configuration.invert_radial_scroll": "Invert Radial Scroll",
+  "utilityvest.configuration.radial_stack_count": "Radial Stack Count",
   "utilityvest.configuration.radial_tooltip": "Radial Tooltip"
 }
