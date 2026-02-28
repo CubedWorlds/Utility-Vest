@@ -2,6 +2,7 @@ package dev.satherov.utilityvest.client.screen;
 
 import dev.satherov.utilityvest.client.input.UVKeybindManager;
 import dev.satherov.utilityvest.common.capabilities.UVVestCapability;
+import dev.satherov.utilityvest.config.UVConfig;
 import dev.satherov.utilityvest.core.lang.UVLanguage;
 import dev.satherov.utilityvest.network.UVNetworking;
 
@@ -87,7 +88,12 @@ public class RadialMenuScreen extends Screen {
         
         if (this.hoveredIndex < 0) {
             Player player = Minecraft.getInstance().player;
-            if (player != null) {
+            UVConfig.ToolTipDisplay display = UVConfig.RadialTooltip;
+            boolean tooltip = player != null;
+            if (display.equals(UVConfig.ToolTipDisplay.NEVER)) tooltip = false;
+            if (display.equals(UVConfig.ToolTipDisplay.SHIFT) && !Screen.hasShiftDown()) tooltip = false;
+            
+            if (tooltip) {
                 List<Component> lines = new ArrayList<>();
                 lines.add(UVLanguage.TOOLTIP_MENU_INSERT.translate(
                         ComponentUtils.wrapInSquareBrackets(InputConstants.Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_LEFT).getDisplayName().copy().withStyle(ChatFormatting.GOLD)),
@@ -168,6 +174,10 @@ public class RadialMenuScreen extends Screen {
         if (!isHovered) return;
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
+        
+        UVConfig.ToolTipDisplay display = UVConfig.RadialTooltip;
+        if (display.equals(UVConfig.ToolTipDisplay.NEVER)) return;
+        if (display.equals(UVConfig.ToolTipDisplay.SHIFT) && !Screen.hasShiftDown()) return;
         
         List<Component> lines = new ArrayList<>();
         lines.add(UVLanguage.TOOLTIP_MENU_SWAP.translate(
@@ -257,7 +267,7 @@ public class RadialMenuScreen extends Screen {
     
     @Override
     public boolean mouseScrolled(double mx, double my, double dx, double dy) {
-        int delta = (int) Math.signum(dy);
+        int delta = (int) Math.signum(dy) * (UVConfig.InvertRadialScroll ? 1 : -1);
         this.row = Math.floorMod(this.row + delta, this.banks);
         this.updateDisplay();
         return true;

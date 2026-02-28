@@ -39,7 +39,11 @@ public enum UVLanguage implements ILangEntry {
     INPUT_WHEEL_UP("input", "wheel.up", "Scroll Up"),
     INPUT_WHEEL_DOWN("input", "wheel.down", "Scroll Down"),
     
-    ERROR_REJECTED("error", "rejected", "Crashing entry! Rejected");
+    ERROR_REJECTED("error", "rejected", "Crashing entry! Rejected"),
+    
+    CONFIG_INVERT_RADIAL_SCROLL("utilityvest.configuration.invert_radial_scroll", "Invert Radial Scroll"),
+    CONFIG_RADIAL_TOOLTIP("utilityvest.configuration.radial_tooltip", "Radial Tooltip"),
+    ;
     
     private final String key;
     private final String value;
