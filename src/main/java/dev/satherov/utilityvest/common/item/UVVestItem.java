@@ -3,6 +3,7 @@ package dev.satherov.utilityvest.common.item;
 import dev.satherov.utilityvest.client.input.UVKeybindManager;
 import dev.satherov.utilityvest.common.menu.UVFilterMenu;
 import dev.satherov.utilityvest.common.menu.UVInventoryMenu;
+import dev.satherov.utilityvest.config.UVConfig;
 import dev.satherov.utilityvest.core.annotations.NothingNull;
 import dev.satherov.utilityvest.core.lang.UVLanguage;
 
@@ -31,6 +32,7 @@ import java.util.Optional;
 public class UVVestItem extends Item {
     
     private final int maxBanks;
+    private int lastOpenRow = 0;
     
     public UVVestItem(Properties props, int maxBanks) {
         super(props.stacksTo(1));
@@ -95,5 +97,13 @@ public class UVVestItem extends Item {
     
     public MenuProvider getFilterMenu() {
         return new SimpleMenuProvider((id, inventory, player) -> new UVFilterMenu(id, inventory, getMaxBanks()), UVLanguage.CONTAINER_FILTERS.translate());
+    }
+
+    public int getLastOpenRow() {
+        return UVConfig.RememberRadialRow ? lastOpenRow : 0;
+    }
+
+    public void setLastOpenRow(int row) {
+        this.lastOpenRow = row;
     }
 }

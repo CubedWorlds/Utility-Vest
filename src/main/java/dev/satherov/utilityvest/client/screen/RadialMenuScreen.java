@@ -2,6 +2,7 @@ package dev.satherov.utilityvest.client.screen;
 
 import dev.satherov.utilityvest.client.input.UVKeybindManager;
 import dev.satherov.utilityvest.common.capabilities.UVVestCapability;
+import dev.satherov.utilityvest.common.item.UVVestItem;
 import dev.satherov.utilityvest.config.UVConfig;
 import dev.satherov.utilityvest.core.lang.UVLanguage;
 import dev.satherov.utilityvest.network.UVNetworking;
@@ -50,10 +51,11 @@ public class RadialMenuScreen extends Screen {
     private int hoveredIndex = -1;
     private int row = 0;
     
-    public RadialMenuScreen(ItemStack vest, int banks) {
+    public RadialMenuScreen(ItemStack vest, int banks, int lastRowOpen) {
         super(Component.literal("Radial Menu"));
         this.vest = vest;
         this.banks = banks;
+        this.row = lastRowOpen;
         this.updateDisplay();
     }
     
@@ -276,6 +278,10 @@ public class RadialMenuScreen extends Screen {
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
         if (UVKeybindManager.RADIAL_KEY.matches(keyCode, scanCode)) {
+            if (UVConfig.RememberRadialRow && vest.getItem() instanceof UVVestItem vestItem) {
+                vestItem.setLastOpenRow(this.row);
+            }
+
             this.onClose();
         }
         return true;
