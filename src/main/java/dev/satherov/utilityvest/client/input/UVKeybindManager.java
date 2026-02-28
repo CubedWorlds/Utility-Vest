@@ -42,7 +42,7 @@ public class UVKeybindManager {
             return;
         }
         
-        if (RADIAL_KEY.matches(event.getKey(), event.getScanCode())) {
+        if (mc.screen == null && RADIAL_KEY.matches(event.getKey(), event.getScanCode())) {
             if (event.getAction() == GLFW.GLFW_PRESS) {
                 ItemStack stack = UVVestItem.getVest(player, true);
                 if (!stack.isEmpty() && stack.getItem() instanceof UVVestItem vest) {
