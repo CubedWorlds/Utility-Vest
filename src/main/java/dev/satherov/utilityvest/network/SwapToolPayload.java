@@ -17,7 +17,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public record SwapToolPayload(boolean main, ItemStack filter) implements CustomPacketPayload {
+public record SwapToolPayload(boolean main, int idx) implements CustomPacketPayload {
     
     public static final StreamCodec<RegistryFriendlyByteBuf, SwapToolPayload> STREAM_CODEC =
             CustomPacketPayload.codec(SwapToolPayload::encode, SwapToolPayload::new);
@@ -27,12 +27,12 @@ public record SwapToolPayload(boolean main, ItemStack filter) implements CustomP
     );
     
     private SwapToolPayload(RegistryFriendlyByteBuf buf) {
-        this(buf.readBoolean(), ItemStack.OPTIONAL_STREAM_CODEC.decode(buf));
+        this(buf.readBoolean(), buf.readInt());
     }
     
     public void encode(RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(this.main());
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, this.filter());
+        buf.writeInt(this.idx());
     }
     
     @Override
@@ -44,17 +44,14 @@ public record SwapToolPayload(boolean main, ItemStack filter) implements CustomP
         public static void handle(SwapToolPayload msg, IPayloadContext ctx) {
             ctx.enqueueWork(() -> {
                 if (ctx.flow().isServerbound() && ctx.player() instanceof ServerPlayer player) {
-                    Handler.execute(player, msg.main(), UVVestItem.getVest(player, false), msg.filter());
+                    Handler.execute(player, msg.main(), UVVestItem.getVest(player, false), msg.idx());
                 }
             });
         }
         
-        public static void execute(Player player, boolean main, ItemStack stack, ItemStack filter) {
+        public static void execute(Player player, boolean main, ItemStack stack, int idx) {
             IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
             if (!stack.isEmpty() && stack.getItem() instanceof UVVestItem && handler instanceof UVVestCapability capability) {
-                int idx = capability.find(filter);
-                if (idx == -1) return;
-                
                 if (main) {
                     ItemStack held = player.getMainHandItem();
                     if (held.getItem() instanceof UVVestItem) return;

@@ -238,7 +238,7 @@ public class RadialMenuScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.hoveredIndex < 0) {
-            UVNetworking.doSwap(this.minecraft.player, button == 0, this.vest, ItemStack.EMPTY);
+            UVNetworking.doSwap(this.minecraft.player, button == 0, this.vest, -1);
             this.updateDisplay();
             return true;
         }
@@ -247,7 +247,6 @@ public class RadialMenuScreen extends Screen {
         
         if (button == 0 || button == 1) {
             RadialMenuItem item = this.menuItems.get(this.hoveredIndex);
-            if (item.stack().isEmpty()) return true;
             item.action().accept(button == 0);
             this.updateDisplay();
             return true;
@@ -288,9 +287,10 @@ public class RadialMenuScreen extends Screen {
         
         for (int i = 0; i < 9; i++) {
             if (startIndex + i < stacks.size()) {
+                final int idx = i;
                 ItemStack stack = stacks.get(startIndex + i);
                 this.addMenuItem(stack, dir -> {
-                    UVNetworking.doSwap(this.minecraft.player, dir, this.vest, stack);
+                    UVNetworking.doSwap(this.minecraft.player, dir, this.vest, idx);
                     this.updateDisplay();
                 });
             }

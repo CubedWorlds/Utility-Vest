@@ -23,8 +23,8 @@ public final class UVNetworking {
         registrar.playBidirectional(SwapToolPayload.TYPE, SwapToolPayload.STREAM_CODEC, SwapToolPayload.Handler::handle);
     }
     
-    public static void doSwap(Player player, boolean main, ItemStack vest, ItemStack filter) {
-        PacketDistributor.sendToServer(new SwapToolPayload(main, filter));
-        SwapToolPayload.Handler.execute(player, main, vest, filter);
+    public static void doSwap(Player player, boolean main, ItemStack vest, int idx) {
+        PacketDistributor.sendToServer(new SwapToolPayload(main, idx));
+        SwapToolPayload.Handler.execute(player, main, vest, idx);
     }
 }

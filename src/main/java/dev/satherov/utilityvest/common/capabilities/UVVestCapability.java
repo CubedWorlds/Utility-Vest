@@ -154,16 +154,19 @@ public class UVVestCapability implements IItemHandlerModifiable {
     }
     
     public ItemStack swap(ItemStack stack, int idx) {
+        if (idx == -1) {
+            for (int i = 0; i < storage.getSlots(); i++) {
+                ItemStack inSlot = storage.getStackInSlot(i);
+                if (inSlot.isEmpty()) {
+                    idx = i;
+                    break;
+                }
+            }
+        }
+        if (idx == -1) return stack;
         ItemStack result = storage.getStackInSlot(idx);
         storage.setStackInSlot(idx, stack);
         return result;
-    }
-    
-    public int find(ItemStack stack) {
-        for (int i = 0; i < storage.getSlots(); i++) {
-            if (ItemStack.isSameItem(storage.getStackInSlot(i), stack)) return i;
-        }
-        return -1;
     }
     
     public void collectItems(Player player) {
