@@ -13,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -28,6 +29,8 @@ public class UVRegistry {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, UtilityVest.MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, UtilityVest.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, UtilityVest.MOD_ID);
+    
+    public static final TagKey<Item> UTILITY_VEST_TAG = TagKey.create(Registries.ITEM, UtilityVest.rl("utility_vest"));
     
     public static final DeferredHolder<Item, UVVestItem> LEATHER_UTILITY_VEST = ITEMS.register("leather_utility_vest", () -> new UVVestItem(new Item.Properties(), 1));
     public static final DeferredHolder<Item, UVVestItem> IRON_UTILITY_VEST = ITEMS.register("iron_utility_vest", () -> new UVVestItem(new Item.Properties(), 2));

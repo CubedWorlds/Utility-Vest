@@ -3,6 +3,7 @@ package dev.satherov.utilityvest.datagen;
 import dev.satherov.utilityvest.UtilityVest;
 import dev.satherov.utilityvest.datagen.assets.UVItemModelProvider;
 import dev.satherov.utilityvest.datagen.assets.UVLanguageProvider;
+import dev.satherov.utilityvest.datagen.data.UVItemTagsProvider;
 import dev.satherov.utilityvest.datagen.data.UVRecipeProvider;
 
 import net.neoforged.bus.api.SubscribeEvent;
@@ -35,6 +36,7 @@ public class UVDataGenerator {
         provider.addSubProvider(event.includeClient(), new UVLanguageProvider(packOutput));
         provider.addSubProvider(event.includeClient(), new UVItemModelProvider(packOutput, fileHelper));
         
+        provider.addSubProvider(event.includeServer(), new UVItemTagsProvider(packOutput, lookupProvider));
         provider.addSubProvider(event.includeServer(), new UVRecipeProvider(packOutput, lookupProvider));
         
         generator.addProvider(true, provider);

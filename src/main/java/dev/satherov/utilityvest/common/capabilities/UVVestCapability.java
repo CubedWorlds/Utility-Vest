@@ -168,7 +168,15 @@ public class UVVestCapability implements IItemHandlerModifiable {
     
     public void collectItems(Player player) {
         Inventory inv = player.getInventory();
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.items.size(); i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack.isEmpty()) continue;
+            
+            if (matchFilter(stack)) {
+                inv.setItem(i, insertWithOverflow(stack));
+            }
+        }
+        for (int i = 0; i < inv.offhand.size(); i++) {
             ItemStack stack = inv.getItem(i);
             if (stack.isEmpty()) continue;
             
@@ -191,9 +199,7 @@ public class UVVestCapability implements IItemHandlerModifiable {
             contents.set(i, this.filters.getStackInSlot(i));
         }
         
-        if (contents.isEmpty()) {
-            return NonNullList.withSize(filters.getSlots(), ItemStack.EMPTY);
-        }
+        if (contents.isEmpty()) return contents;
         return NonNullList.of(ItemStack.EMPTY, contents.toArray(ItemStack[]::new));
     }
     
@@ -236,6 +242,7 @@ public class UVVestCapability implements IItemHandlerModifiable {
     }
     
     public boolean matchFilter(ItemStack stack) {
+        if (stack.is(UVRegistry.UTILITY_VEST_TAG)) return false;
         var filtersList = getFilters();
         if (filtersList.stream().allMatch(ItemStack::isEmpty)) return true;
         return filtersList.stream().anyMatch(f -> ItemStack.isSameItem(f, stack));

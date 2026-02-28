@@ -10,10 +10,14 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 @NothingNull
@@ -73,5 +77,20 @@ public abstract class UVVestMenu extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         if (UVVestItem.getVest(player, true).isEmpty()) return false;
         return player.isAlive();
+    }
+    
+    private SlotAccess createAccess() {
+        return new SlotAccess() {
+            @Override
+            public ItemStack get() {
+                return UVVestMenu.this.getCarried();
+            }
+            
+            @Override
+            public boolean set(ItemStack stack) {
+                UVVestMenu.this.setCarried(stack);
+                return true;
+            }
+        };
     }
 }

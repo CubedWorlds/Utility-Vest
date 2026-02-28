@@ -2,6 +2,7 @@ package dev.satherov.utilityvest.common.menu;
 
 
 import dev.satherov.utilityvest.common.capabilities.UVVestCapability;
+import dev.satherov.utilityvest.common.item.UVVestItem;
 import dev.satherov.utilityvest.core.UVRegistry;
 import dev.satherov.utilityvest.core.annotations.NothingNull;
 import dev.satherov.utilityvest.core.lang.UVLanguage;
@@ -11,6 +12,7 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
@@ -79,21 +81,22 @@ public class UVFilterMenu extends UVVestMenu {
     }
     
     @Override
-    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+    public void clicked(int slotId, int button, ClickType type, Player player) {
         if (slotId >= 0 && slotId < (this.rows * 9)) {
             final Slot slot = this.slots.get(slotId);
             
-            switch (clickType) {
+            switch (type) {
                 case SWAP:
                 case PICKUP:
                 case PICKUP_ALL: {
-                    final ItemStack stack = this.getCarried();
+                    final ItemStack carried = this.getCarried();
+                    if (carried.getItem() instanceof UVVestItem) return;
                     
-                    if (stack.isStackable() && stack.getCount() > 0) {
-                        slot.set(stack.copy());
-                    } else if (!stack.isStackable() && stack.getCount() > 0) {
+                    if (carried.isStackable() && carried.getCount() > 0) {
+                        slot.set(carried.copy());
+                    } else if (!carried.isStackable() && carried.getCount() > 0) {
                         try {
-                            slot.set(stack.copy());
+                            slot.set(carried.copy());
                         } catch (Exception e) {
                             slot.set(ItemStack.EMPTY);
                             player.closeContainer();
@@ -110,6 +113,6 @@ public class UVFilterMenu extends UVVestMenu {
             }
         }
         
-        super.clicked(slotId, button, clickType, player);
+        super.clicked(slotId, button, type, player);
     }
 }

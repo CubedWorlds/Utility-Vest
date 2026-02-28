@@ -40,7 +40,13 @@ public class UVInventoryMenu extends UVVestMenu {
         // Vest Inventory
         for (int j = 0; j < this.rows; j++) {
             for (int k = 0; k < 9; k++) {
-                this.addSlot(new SlotItemHandler(handler.storage, k + j * 9, 8 + k * 18, 18 + j * 18));
+                this.addSlot(new SlotItemHandler(handler.storage, k + j * 9, 8 + k * 18, 18 + j * 18) {
+                    
+                    @Override
+                    public boolean mayPlace(ItemStack stack) {
+                        return !(stack.getItem() instanceof UVVestItem) && super.mayPlace(stack);
+                    }
+                });
             }
         }
         
@@ -99,42 +105,5 @@ public class UVInventoryMenu extends UVVestMenu {
         }
         
         return original;
-    }
-    
-    @Override
-    public void clicked(int slotId, int button, ClickType type, Player player) {
-        if (slotId >= 0 && slotId < this.slots.size()) {
-            final Slot slot = this.slots.get(slotId);
-            final ItemStack stack = slot.getItem();
-            final ItemStack carried = this.getCarried();
-            if (stack.getItem() instanceof UVVestItem) return;
-            
-            if (type == ClickType.SWAP && (button >= 0 && button < 9 || button == 40)) {
-                ItemStack target = player.getInventory().getItem(button);
-                if (target.getItem() instanceof UVVestItem) return;
-            }
-            
-            if (slotId < (this.rows * 9)) {
-                ClickAction action = button == 0 ? ClickAction.PRIMARY : ClickAction.SECONDARY;
-                if (stack.overrideStackedOnOther(slot, action, player) || stack.overrideOtherStackedOnMe(carried, slot, action, player, this.createAccess())) return;
-            }
-        }
-        
-        super.clicked(slotId, button, type, player);
-    }
-    
-    private SlotAccess createAccess() {
-        return new SlotAccess() {
-            @Override
-            public ItemStack get() {
-                return UVInventoryMenu.this.getCarried();
-            }
-            
-            @Override
-            public boolean set(ItemStack stack) {
-                UVInventoryMenu.this.setCarried(stack);
-                return true;
-            }
-        };
     }
 }
