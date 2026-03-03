@@ -43,6 +43,7 @@ public enum UVLanguage implements ILangEntry {
     
     CONFIG_INVERT_RADIAL_SCROLL("utilityvest.configuration.invert_radial_scroll", "Invert Radial Scroll"),
     CONFIG_RADIAL_TOOLTIP("utilityvest.configuration.radial_tooltip", "Radial Tooltip"),
+    CONFIG_RADIAL_STACK_COUNT("utilityvest.configuration.radial_stack_count", "Radial Stack Count"),
     CONFIG_REMEMBER_RADIAL_ROW("utilityvest.configuration.remember_radial_row", "Remember Radial Row"),
     ;
     

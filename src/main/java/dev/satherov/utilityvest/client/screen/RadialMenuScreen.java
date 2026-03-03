@@ -7,6 +7,8 @@ import dev.satherov.utilityvest.config.UVConfig;
 import dev.satherov.utilityvest.core.lang.UVLanguage;
 import dev.satherov.utilityvest.network.UVNetworking;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ArmorItem;
 import net.neoforged.neoforge.capabilities.Capabilities;
 
 import net.minecraft.ChatFormatting;
@@ -170,7 +172,20 @@ public class RadialMenuScreen extends Screen {
         
         if (!stack.isEmpty()) {
             graphics.renderItem(stack, x, y);
+
+            UVConfig.RadialStackCountDisplay display = UVConfig.RadialStackCount;
+
+            if (display.equals(UVConfig.RadialStackCountDisplay.NEVER) && stack.getCount() == 1) {
+                return;
+            }
+
+            if (display.equals(UVConfig.RadialStackCountDisplay.TOOLS_ONLY)
+            && (stack.has(DataComponents.TOOL) || stack.getItem() instanceof ArmorItem)) {
+                return;
+            }
+
             graphics.renderItemDecorations(this.font, stack, x, y, String.valueOf(stack.getCount()));
+
         }
         
         if (!isHovered) return;
