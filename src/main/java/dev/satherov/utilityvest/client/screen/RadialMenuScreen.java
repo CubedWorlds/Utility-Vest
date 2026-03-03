@@ -297,8 +297,8 @@ public class RadialMenuScreen extends Screen {
         
         for (int i = 0; i < 9; i++) {
             if (startIndex + i < stacks.size()) {
-                final int idx = i;
-                ItemStack stack = stacks.get(startIndex + i);
+                final int idx = startIndex + i;
+                ItemStack stack = stacks.get(idx);
                 this.addMenuItem(stack, dir -> {
                     UVNetworking.doSwap(this.minecraft.player, dir, this.vest, idx);
                     this.updateDisplay();
