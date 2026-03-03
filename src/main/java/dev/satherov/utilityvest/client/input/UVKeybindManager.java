@@ -46,7 +46,7 @@ public class UVKeybindManager {
             if (event.getAction() == GLFW.GLFW_PRESS) {
                 ItemStack stack = UVVestItem.getVest(player, true);
                 if (!stack.isEmpty() && stack.getItem() instanceof UVVestItem vest) {
-                    RadialMenuScreen screen = new RadialMenuScreen(stack, vest.getMaxBanks());
+                    RadialMenuScreen screen = new RadialMenuScreen(stack, vest.getMaxBanks(), vest.getLastOpenRow());
                     mc.setScreen(screen);
                 }
             }
