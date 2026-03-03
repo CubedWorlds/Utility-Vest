@@ -32,4 +32,8 @@ public class UVConfig {
             return this.comment;
         }
     }
+
+    @ConfigVal(name = "remember_radial_row", comment = "Reopen radial menu on last closed row")
+    @ConfigVal.Boolean
+    public static boolean RememberRadialRow = true;
 }
