@@ -55,6 +55,8 @@ public class UVInventoryMenu extends UVVestMenu {
     
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
+        if (index < 0 || index >= this.slots.size()) return ItemStack.EMPTY;
+        
         final SlotItemHandler slot = (SlotItemHandler) this.slots.get(index);
         
         if (!slot.hasItem()) return ItemStack.EMPTY;
@@ -99,10 +101,10 @@ public class UVInventoryMenu extends UVVestMenu {
         }
         
         int moved = original.getCount() - result.getCount();
-        if (moved > 0) {
-            slot.getItemHandler().extractItem(slot.getSlotIndex(), moved, false);
-            slot.setChanged();
-        }
+        if (moved <= 0) return ItemStack.EMPTY;
+        
+        slot.getItemHandler().extractItem(slot.getSlotIndex(), moved, false);
+        slot.setChanged();
         
         return original;
     }
