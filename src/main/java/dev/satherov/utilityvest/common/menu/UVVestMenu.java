@@ -79,6 +79,20 @@ public abstract class UVVestMenu extends AbstractContainerMenu {
         return player.isAlive();
     }
     
+    @Override
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+        if (slotId >= 0 && slotId < (this.rows * 9)) {
+            final Slot slot = this.slots.get(slotId);
+            ClickAction action = button == 0 ? ClickAction.PRIMARY : ClickAction.SECONDARY;
+            final ItemStack stack = slot.getItem();
+            final ItemStack carried = this.getCarried();
+            
+            if (stack.overrideStackedOnOther(slot, action, player) || stack.overrideOtherStackedOnMe(carried, slot, action, player, this.createAccess())) return;
+        }
+        
+        super.clicked(slotId, button, clickType, player);
+    }
+    
     private SlotAccess createAccess() {
         return new SlotAccess() {
             @Override
